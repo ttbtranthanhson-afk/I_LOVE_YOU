@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -60,7 +60,6 @@
                 opacity: 0;
                 transform: scale(0.5);
             }
-
             to {
                 opacity: 0.9;
                 transform: scale(1);
@@ -101,10 +100,10 @@
             transition: all 1s ease;
         }
 
-            .completion-message.show {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .completion-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         .reset-button {
             position: absolute;
@@ -123,34 +122,34 @@
             z-index: 10;
         }
 
-            .reset-button:hover {
-                background-color: rgba(255, 255, 255, 0.3);
-                transform: translateX(-50%) scale(1.05);
-            }
+        .reset-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(-50%) scale(1.05);
+        }
     </style>
 </head>
 <body>
     <div class="flower-text-container" id="flower-text-container"></div>
-
+    
     <div class="love-container">
         <span class="love-word" id="word-i">I</span>
         <span class="love-word" id="word-love">Love</span>
         <span class="love-word" id="word-you">You</span>
     </div>
-
+    
     <div class="instructions" id="instructions">
         Di chuột qua các chữ để tạo chữ "I Love You" bằng những bông hoa
     </div>
-
+    
     <div class="completion-message" id="completion-message">
-        Làm người tớ yêu nhé! ❤️
+        làm người tớ yêu nhé! ❤️
     </div>
-
+    
     <button class="reset-button" id="reset-button">Tạo lại</button>
 
     <script>
         const flowers = ['🌸', '🌷', '🌺', '🌹', '💮', '🏵️', '🌻', '🌼', '💐'];
-
+        
         const wordI = document.getElementById('word-i');
         const wordLove = document.getElementById('word-love');
         const wordYou = document.getElementById('word-you');
@@ -158,28 +157,28 @@
         const instructions = document.getElementById('instructions');
         const completionMessage = document.getElementById('completion-message');
         const resetButton = document.getElementById('reset-button');
-
+        
         let letterPositions = [];
         let usedPositions = new Set();
-
+        
         let completedLetters = {
             'I': false,
             'Love': false,
             'You': false
         };
-
+        
         let lastFlowerTime = 0;
         const flowerInterval = 15;
-
+        
         function calculateLetterPositions() {
             letterPositions = [];
-
+            
             // Chữ "I"
             const rectI = wordI.getBoundingClientRect();
             const iCenterX = rectI.left + rectI.width / 2;
             const iTop = rectI.top + rectI.height * 0.1;
             const iBottom = rectI.top + rectI.height * 0.9;
-
+            
             for (let i = 0; i < 25; i++) {
                 const y = iTop + (iBottom - iTop) * (i / 24);
                 letterPositions.push({
@@ -189,14 +188,14 @@
                     key: `I-${i}`
                 });
             }
-
+            
             // Chữ "Love"
             const rectLove = wordLove.getBoundingClientRect();
             const loveLeft = rectLove.left;
             const loveTop = rectLove.top;
             const loveWidth = rectLove.width;
             const loveHeight = rectLove.height;
-
+            
             // L
             const lX = loveLeft + loveWidth * 0.08;
             for (let i = 0; i < 20; i++) {
@@ -215,7 +214,7 @@
                     key: `L-h-${i}`
                 });
             }
-
+            
             // o (trong Love)
             const oCenterX = loveLeft + loveWidth * 0.32;
             const oCenterY = loveTop + loveHeight * 0.5;
@@ -229,14 +228,14 @@
                     key: `o-${i}`
                 });
             }
-
+            
             // v
             const vLeftX = loveLeft + loveWidth * 0.52;
             const vRightX = loveLeft + loveWidth * 0.68;
             const vTopY = loveTop + loveHeight * 0.2;
             const vBottomY = loveTop + loveHeight * 0.8;
             const vCenterX = (vLeftX + vRightX) / 2;
-
+            
             for (let i = 0; i < 15; i++) {
                 letterPositions.push({
                     x: vLeftX + (vCenterX - vLeftX) * (i / 14),
@@ -253,14 +252,14 @@
                     key: `v-right-${i}`
                 });
             }
-
+            
             // e (vẽ đúng hướng: từ trái sang phải)
             const eLeft = loveLeft + loveWidth * 0.78;
             const eTop = loveTop + loveHeight * 0.2;
             const eBottom = loveTop + loveHeight * 0.8;
             const eMid = loveTop + loveHeight * 0.5;
             const eWidth = loveWidth * 0.18;
-
+            
             // Cạnh trái (từ trên xuống)
             for (let i = 0; i < 15; i++) {
                 letterPositions.push({
@@ -270,7 +269,7 @@
                     key: `e-left-${i}`
                 });
             }
-
+            
             // Ngang trên (từ trái sang phải)
             for (let i = 0; i < 12; i++) {
                 letterPositions.push({
@@ -280,7 +279,7 @@
                     key: `e-top-${i}`
                 });
             }
-
+            
             // Ngang giữa (từ trái sang phải, ngắn hơn)
             for (let i = 0; i < 8; i++) {
                 letterPositions.push({
@@ -290,7 +289,7 @@
                     key: `e-mid-${i}`
                 });
             }
-
+            
             // Ngang dưới (từ trái sang phải)
             for (let i = 0; i < 12; i++) {
                 letterPositions.push({
@@ -300,14 +299,14 @@
                     key: `e-bottom-${i}`
                 });
             }
-
+            
             // Chữ "You"
             const rectYou = wordYou.getBoundingClientRect();
             const youLeft = rectYou.left;
             const youTop = rectYou.top;
             const youWidth = rectYou.width;
             const youHeight = rectYou.height;
-
+            
             // Y
             const yLeftX = youLeft + youWidth * 0.05;
             const yRightX = youLeft + youWidth * 0.25;
@@ -315,7 +314,7 @@
             const yTopY = youTop + youHeight * 0.15;
             const yMidY = youTop + youHeight * 0.5;
             const yBottomY = youTop + youHeight * 0.85;
-
+            
             for (let i = 0; i < 12; i++) {
                 letterPositions.push({
                     x: yLeftX + (yCenterX - yLeftX) * (i / 11),
@@ -340,7 +339,7 @@
                     key: `Y-stem-${i}`
                 });
             }
-
+            
             // o (trong You)
             const yo_CenterX = youLeft + youWidth * 0.45;
             const yo_CenterY = youTop + youHeight * 0.5;
@@ -354,14 +353,14 @@
                     key: `Yo-${i}`
                 });
             }
-
+            
             // u
             const uLeftX = youLeft + youWidth * 0.68;
             const uRightX = youLeft + youWidth * 0.88;
             const uTopY = youTop + youHeight * 0.2;
             const uBottomY = youTop + youHeight * 0.8;
             const uRadius = (uRightX - uLeftX) / 2;
-
+            
             for (let i = 0; i < 15; i++) {
                 letterPositions.push({
                     x: uLeftX,
@@ -370,7 +369,7 @@
                     key: `u-left-${i}`
                 });
             }
-
+            
             for (let i = 0; i < 20; i++) {
                 const angle = Math.PI + Math.PI * (i / 19);
                 letterPositions.push({
@@ -380,7 +379,7 @@
                     key: `u-bottom-${i}`
                 });
             }
-
+            
             for (let i = 0; i < 15; i++) {
                 letterPositions.push({
                     x: uRightX,
@@ -390,100 +389,100 @@
                 });
             }
         }
-
+        
         function createFlowerAtPosition(x, y) {
             const flower = document.createElement('div');
             flower.className = 'flower-letter';
-
+            
             const flowerType = Math.floor(Math.random() * flowers.length);
             flower.innerHTML = flowers[flowerType];
-
+            
             const size = Math.random() * 8 + 20;
             flower.style.fontSize = `${size}px`;
-
+            
             flower.style.left = `${x - 12}px`;
             flower.style.top = `${y - 12}px`;
-
+            
             const hue = Math.random() * 30 - 15;
             flower.style.filter = `drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)) hue-rotate(${hue}deg)`;
-
+            
             flowerContainer.appendChild(flower);
             return flower;
         }
-
+        
         function createFlowersNearMouse(x, y, elementId) {
             const now = Date.now();
             if (now - lastFlowerTime < flowerInterval) return;
             lastFlowerTime = now;
-
+            
             let targetWord = '';
             if (elementId === 'word-i') targetWord = 'I';
             else if (elementId === 'word-love') targetWord = 'Love';
             else if (elementId === 'word-you') targetWord = 'You';
-
+            
             if (!targetWord) return;
-
+            
             let closestPos = null;
             let minDistance = Infinity;
             const threshold = 60;
-
+            
             for (const pos of letterPositions) {
                 if (pos.word !== targetWord) continue;
                 if (usedPositions.has(pos.key)) continue;
-
+                
                 const distance = Math.sqrt(Math.pow(pos.x - x, 2) + Math.pow(pos.y - y, 2));
                 if (distance < minDistance && distance < threshold) {
                     minDistance = distance;
                     closestPos = pos;
                 }
             }
-
+            
             if (closestPos) {
                 createFlowerAtPosition(closestPos.x, closestPos.y);
                 usedPositions.add(closestPos.key);
                 checkLetterCompletion();
             }
         }
-
+        
         function checkLetterCompletion() {
             const wordCounts = {
                 'I': 0,
                 'Love': 0,
                 'You': 0
             };
-
+            
             const wordTotals = {
                 'I': 0,
                 'Love': 0,
                 'You': 0
             };
-
+            
             for (const pos of letterPositions) {
                 wordTotals[pos.word]++;
                 if (usedPositions.has(pos.key)) {
                     wordCounts[pos.word]++;
                 }
             }
-
+            
             if (!completedLetters['I'] && wordCounts['I'] / wordTotals['I'] > 0.85) {
                 completedLetters['I'] = true;
                 wordI.style.color = 'rgba(255, 255, 255, 0.02)';
             }
-
+            
             if (!completedLetters['Love'] && wordCounts['Love'] / wordTotals['Love'] > 0.85) {
                 completedLetters['Love'] = true;
                 wordLove.style.color = 'rgba(255, 255, 255, 0.02)';
             }
-
+            
             if (!completedLetters['You'] && wordCounts['You'] / wordTotals['You'] > 0.85) {
                 completedLetters['You'] = true;
                 wordYou.style.color = 'rgba(255, 255, 255, 0.02)';
             }
-
+            
             if (completedLetters['I'] && completedLetters['Love'] && completedLetters['You']) {
                 instructions.style.opacity = '0';
                 completionMessage.classList.add('show');
-
+                
                 for (let i = 0; i < 5; i++) {
                     setTimeout(() => {
                         const x = Math.random() * window.innerWidth;
@@ -493,48 +492,47 @@
                 }
             }
         }
-
+        
         function resetPage() {
             flowerContainer.innerHTML = '';
             usedPositions.clear();
-
+            
             completedLetters = {
                 'I': false,
                 'Love': false,
                 'You': false
             };
-
+            
             wordI.style.color = 'rgba(255, 255, 255, 0.08)';
             wordLove.style.color = 'rgba(255, 255, 255, 0.08)';
             wordYou.style.color = 'rgba(255, 255, 255, 0.08)';
-
+            
             instructions.style.opacity = '1';
             completionMessage.classList.remove('show');
-
+            
             calculateLetterPositions();
         }
-
+        
         function handleMouseMove(event) {
             const element = event.currentTarget;
             createFlowersNearMouse(event.clientX, event.clientY, element.id);
         }
-
+        
         function init() {
             calculateLetterPositions();
-
+            
             [wordI, wordLove, wordYou].forEach(word => {
                 word.addEventListener('mousemove', handleMouseMove);
             });
-
+            
             resetButton.addEventListener('click', resetPage);
-
+            
             window.addEventListener('resize', () => {
                 resetPage();
             });
         }
-
+        
         window.addEventListener('load', init);
     </script>
 </body>
-
 </html>
